@@ -15,33 +15,28 @@ def load_pickle(path):
 
 def load_task(dataset_path):
     ret_data = []
-    # vocab = []
     with open(dataset_path) as f:
         data = json.load(f)
         ver = data['version']
         print('dataset version:', ver)
         data = data['data']
         for i, d in enumerate(data):
-            print('load', d['title'], i, '/', len(data))
+            if i % 100 == 0: print('load_task:', i, '/', len(data))
+            # print('load', d['title'], i, '/', len(data))
             for p in d['paragraphs']:
                 c = word_tokenize(p['context'])
-                # vocab += c
                 q, a = [], []
                 for qa in p['qas']:
                     q = word_tokenize(qa['question'])
-                    # vocab += q
                     a = [ans['text'] for ans in qa['answers']]
-                    # for ta in qa['answers']:
-                        # vocab += [ta['text']]
-                        # break
-                    ret_data.append((c, q, a))
+                    ret_data.append((c, qa['id'], q, a))
     return ret_data
 
 
-def vectroize(data, w2i, ctx_maxlen, qst_maxlen):
+def vectorize(data, w2i, ctx_maxlen, qst_maxlen):
     C, Q, A = [], [], []
-    for i, (context, question, answer) in enumerate(data):
-        if i % 20000: print('vectroize:', i, '/', len(data))
+    for i, (context, _, question, answer) in enumerate(data):
+        if i % 10000 == 0: print('vectroize:', i, '/', len(data))
         # not use context
 #         c = [w2i[w] for w in context if w in w2i]
 #         c = c[:ctx_maxlen]
@@ -54,7 +49,8 @@ def vectroize(data, w2i, ctx_maxlen, qst_maxlen):
         q += [0] * q_pad_len
 
         y = np.zeros(len(w2i))
-        y[w2i[answer[0]]] = 1
+        if answer[0] in w2i:
+            y[w2i[answer[0]]] = 1
 
 #         C.append(c)
         Q.append(q)

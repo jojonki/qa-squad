@@ -37,12 +37,12 @@ def load_task(dataset_path):
                     ret_data.append((c, q, a))
     return ret_data
 
-# vocab = sorted(list(set(vocab)))
-# print('len train_X', len(train_X))
 
 def vectroize(data, w2i, ctx_maxlen, qst_maxlen):
     C, Q, A = [], [], []
-    for context, question, answer in data:
+    for i, (context, question, answer) in enumerate(data):
+        if i % 20000: print('vectroize:', i, '/', len(data))
+        # not use context
 #         c = [w2i[w] for w in context if w in w2i]
 #         c = c[:ctx_maxlen]
 #         c_pad_len = max(0, ctx_maxlen - len(c))
@@ -61,7 +61,7 @@ def vectroize(data, w2i, ctx_maxlen, qst_maxlen):
         A.append(y)
     
 #     C = np.array(C)#, dtype=np.uint32)
-    Q = np.array(Q)#, dtype=np.uint32)
+    Q = np.array(Q)
     A = np.array(A, dtype='byte')
 
     return C, Q, A

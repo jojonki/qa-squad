@@ -1,7 +1,7 @@
 from keras import backend as K
 from keras.models import Model
 from keras.layers.embeddings import Embedding
-from keras.layers import Input, Activation, Dense, LSTM, Lambda, Permute, Dropout, add, multiply, dot
+from keras.layers import Input, Activation, Dense, Lambda
 from keras.layers.normalization import BatchNormalization
 
 def SimpleEmbedding(question_maxlen, vocab_size, embd_size):
@@ -12,5 +12,5 @@ def SimpleEmbedding(question_maxlen, vocab_size, embd_size):
     y = BatchNormalization()(y)
     y = Activation('softmax')(y)
     model = Model(q, y)
-    
+
     return model

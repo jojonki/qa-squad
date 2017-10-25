@@ -1,12 +1,5 @@
 import numpy as np
 import json
-import pprint
-
-from keras import backend as K
-from keras.models import Model
-from keras.layers.embeddings import Embedding
-from keras.layers import Input, Activation, Dense, LSTM, Lambda, Permute, Dropout, add, multiply, dot
-from keras.layers.normalization import BatchNormalization
 
 from process_data import save_pickle, load_pickle, load_task, vectroize
 from net.simple_embedding import SimpleEmbedding

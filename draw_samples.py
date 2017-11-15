@@ -9,10 +9,10 @@ from process_data import save_pickle, load_pickle, load_task
 # save_pickle(train_data, 'pickle/train_data.pickle')
 # save_pickle(dev_data, 'pickle/dev_data.pickle')
 
-train_data = load_pickle('pickle/train_data.pickle')
-dev_data = load_pickle('pickle/dev_data.pickle')
+# train_data = load_pickle('pickle/train_data.pickle')
+# dev_data = load_pickle('pickle/dev_data.pickle')
 
-def draw_sample(data, n_samples=5, random_choice=False):
+def draw_samples(data, n_samples=5, random_choice=False):
     n_data = len(data)
     for i in range(n_samples):
         print('------------------------------------------')
@@ -26,6 +26,25 @@ def draw_sample(data, n_samples=5, random_choice=False):
         print('Question:', ' '.join(target[2]))
         print('Answer  :', ' '.join(target[3]))
 
-draw_sample(train_data+dev_data)
+def draw_samples2(dataset_path, title_count=10):
+    with open(dataset_path) as f:
+        data = json.load(f)
+        data = data['data']
+        for i, d in enumerate(data):
+            # if i % 100 == 0: print('load_task:', i, '/', len(data))
+            print('\n-----------------------------------------------')
+            print('Title:', d['title'])
+            for p in d['paragraphs']:
+                print('==================')
+                print('Context:', p['context'])
+                q, a = [], []
+                for qa in p['qas']:
+                    print('Q:', qa['question'])
+                    print('A:', qa['answers'][0]['text'])
+                # break
+            if i >= title_count: break
 
-print('end')
+# draw_sample(train_data+dev_data)
+draw_samples2('./dataset/train-v1.1.json', 1000000)
+
+# print('end')
